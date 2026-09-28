@@ -1,0 +1,76 @@
+{% extends "admin/change_form.html" %}
+
+{% block extrahead %}
+{{ block.super }}
+<!-- Incluimos la libreria de Html5-Qrcode para el escanear codigos -->
+<script src="https://unpkg.com/html5-qrcode" type="text/javascript"></script>
+{% endblock %}
+
+{% block content %}
+{{ block.super }}
+
+<div style="margin: 20px 0; padding: 15px; background: #f8f9fa; border: 1px solid #dee2e6; border-radius: 4px; max-width: 600px;">
+    <h3>Escanear Codigo de Barras o QR</h3>
+    <p>Utiliza la camara de tu dispositivo para capturar el codigo automaticamente en el campo correspondiente.</p>
+    <button type="button" id="start-scan-btn" style="background: #417690; color: #fff; border: none; padding: 10px 15px; border-radius: 4px; cursor: pointer;">Abrir Camara</button>
+    <button type="button" id="stop-scan-btn" style="background: #ba2121; color: #fff; border: none; padding: 10px 15px; border-radius: 4px; cursor: pointer; display: none; margin-left: 10px;">Cerrar Camara</button>
+    
+    <div id="reader" style="width: 100%; margin-top: 15px;"></div>
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const startBtn = document.getElementById('start-scan-btn');
+        const stopBtn = document.getElementById('stop-scan-btn');
+        let html5QrcodeScanner = null;
+
+        startBtn.addEventListener('click', function () {
+            startBtn.style.display = 'none';
+            stopBtn.style.display = 'inline-block';
+
+            html5QrcodeScanner = new Html5Qrcode("reader");
+            
+            const qrCodeSuccessCallback = (decodedText, decodedResult) => {
+                // Buscamos el campo de codigo en el formulario de Django (por lo general el id termina en _codigo o codigo)
+                const codigoInput = document.querySelector('input[name="codigo"]');
+                if (codigoInput) {
+                    codigoInput.value = decodedText;
+                    // Disparamos evento de cambio por si hay validaciones
+                    codigoInput.dispatchEvent(new Event('input', { bubbles: true }));
+                    alert("¡Codigo detectado con exito: " + decodedText + "!");
+                } else {
+                    alert("Codigo leido: " + decodedText + " (Asegurate de que el campo del modelo se llame 'codigo')");
+                }
+                
+                // Detenemos el escaner despues de una lectura exitosa
+                html5QrcodeScanner.stop().then(() => {
+                    startBtn.style.display = 'inline-block';
+                    stopBtn.style.display = 'none';
+                }).catch(err => {
+                    console.error("Error al detener el escaner.", err);
+                });
+            };
+
+            const config = { fps: 10, qrbox: { width: 250, height: 150 } };
+
+            html5QrcodeScanner.start({ facingMode: "environment" }, config, qrCodeSuccessCallback)
+                .catch(err => {
+                    alert("No se pudo iniciar la camara. Verifica los permisos del navegador.");
+                    startBtn.style.display = 'inline-block';
+                    stopBtn.style.display = 'none';
+                });
+        });
+
+        stopBtn.addEventListener('click', function () {
+            if (html5QrcodeScanner) {
+                html5QrcodeScanner.stop().then(() => {
+                    startBtn.style.display = 'inline-block';
+                    stopBtn.style.display = 'none';
+                }).catch(err => {
+                    console.error("Error al detener el escaner.", err);
+                });
+            }
+        });
+    });
+</script>
+{% endblock %}

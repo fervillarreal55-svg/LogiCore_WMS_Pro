@@ -1,0 +1,481 @@
+{% extends "admin/base.html" %}
+
+{% block content %}
+{% block content_title %}{% endblock %}
+{% block breadcrumbs %}{% endblock %}
+
+<!-- Importación de Tipografía Profesional y Chart.js -->
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<style>
+    /* DESTRUCCIÓN TOTAL DE CABECERAS DE JAZZMIN POR CSS */
+    .content-header, 
+    .content > .container-fluid > .row:first-child:has(h1),
+    .content > .container-fluid > .row:first-child:has(.fa-folder),
+    div.content-header,
+    section.content-header {
+        display: none !important;
+        visibility: hidden !important;
+        height: 0 !important;
+        margin: 0 !important;
+        padding: 0 !important;
+        overflow: hidden !important;
+    }
+
+    body, .main-sidebar, .content-wrapper, .card {
+        font-family: 'Plus Jakarta Sans', sans-serif !important;
+    }
+    .custom-dashboard {
+        background-color: #f4f7f6;
+        padding: 20px;
+        min-height: 100vh;
+    }
+    .card-metric {
+        background: linear-gradient(135deg, #e8f5e9 0%, #c8e6c9 100%);
+        border: none;
+        border-radius: 12px;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+        transition: transform 0.2s ease;
+    }
+    .card-metric:hover {
+        transform: translateY(-3px);
+    }
+    .card-metric h3 {
+        color: #1b5e20;
+        font-weight: 700;
+    }
+    .card-metric p {
+        color: #2e7d32;
+        font-weight: 600;
+        font-size: 0.85rem;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+    }
+    .card-chart-light {
+        background: linear-gradient(135deg, #e8f5e9 0%, #c8e6c9 100%);
+        border: none;
+        border-radius: 12px;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+    }
+    .card-chart-light h5 {
+        color: #1b5e20;
+        font-weight: 700;
+    }
+    .btn-custom-action {
+        background-color: #2e7d32;
+        color: #ffffff;
+        border-radius: 8px;
+        font-weight: 600;
+        padding: 8px 16px;
+        border: none;
+    }
+    .btn-custom-action:hover {
+        background-color: #1b5e20;
+        color: #ffffff;
+    }
+    .live-clock-badge {
+        background: #e8f5e9;
+        border: 1px solid #c8e6c9;
+        color: #1b5e20;
+        padding: 6px 14px;
+        border-radius: 8px;
+        font-weight: 600;
+        font-size: 0.9rem;
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        box-shadow: 0 2px 5px rgba(0,0,0,0.02);
+    }
+    .task-item {
+        background: rgba(255, 255, 255, 0.6);
+        border-left: 4px solid #1b5e20;
+        padding: 8px 12px;
+        border-radius: 6px;
+        margin-bottom: 8px;
+        font-size: 0.88rem;
+        color: #1b5e20;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+    .task-item.completed {
+        border-left-color: #81c784;
+        text-decoration: line-through;
+        opacity: 0.7;
+    }
+    .alert-stock-item {
+        background: rgba(255, 235, 238, 0.7);
+        border-left: 4px solid #d32f2f;
+        padding: 8px 12px;
+        border-radius: 6px;
+        margin-bottom: 8px;
+        font-size: 0.88rem;
+        color: #b71c1c;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+    .table-custom {
+        background: rgba(255, 255, 255, 0.7);
+        border-radius: 8px;
+        overflow: hidden;
+    }
+    .table-custom th {
+        background-color: #2e7d32;
+        color: #ffffff;
+        border: none;
+        font-size: 0.85rem;
+    }
+    .table-custom td {
+        color: #1b5e20;
+        font-size: 0.85rem;
+        vertical-align: middle;
+        border-top: 1px solid rgba(200, 230, 201, 0.5);
+    }
+</style>
+
+<div class="custom-dashboard">
+    <!-- Encabezado del Panel con Reloj en Tiempo Real -->
+    <div class="row mb-4 align-items-center">
+        <div class="col-lg-8 col-md-7">
+            <h4 class="font-weight-bold text-dark mb-1">Panel de Control Logístico</h4>
+            <p class="text-muted mb-0">Resumen general de operaciones y estado del WMS en tiempo real.</p>
+        </div>
+        <div class="col-lg-4 col-md-5 text-md-right mt-3 mt-md-0 d-flex justify-content-md-end align-items-center gap-3">
+            <div class="live-clock-badge mr-3">
+                <i class="far fa-clock"></i>
+                <span id="live-clock">--:--:--</span>
+            </div>
+            <a href="./modulo/producto/add/" class="btn btn-custom-action shadow-sm">
+                <i class="fas fa-plus mr-1"></i> Registrar
+            </a>
+        </div>
+    </div>
+
+    <!-- Fila de Tarjetas de Métricas -->
+    <div class="row mb-4">
+        <div class="col-xl-3 col-md-6 mb-3">
+            <div class="card card-metric p-3">
+                <div class="d-flex justify-content-between align-items-center">
+                    <div>
+                        <p class="mb-1">Total Productos</p>
+                        <h3 class="mb-0">10</h3>
+                    </div>
+                    <div class="icon-shape bg-white p-3 rounded-circle shadow-sm text-success">
+                        <i class="fas fa-boxes fa-2x"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-xl-3 col-md-6 mb-3">
+            <div class="card card-metric p-3">
+                <div class="d-flex justify-content-between align-items-center">
+                    <div>
+                        <p class="mb-1">Almacenes</p>
+                        <h3 class="mb-0">Activos</h3>
+                    </div>
+                    <div class="icon-shape bg-white p-3 rounded-circle shadow-sm text-success">
+                        <i class="fas fa-warehouse fa-2x"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-xl-3 col-md-6 mb-3">
+            <div class="card card-metric p-3">
+                <div class="d-flex justify-content-between align-items-center">
+                    <div>
+                        <p class="mb-1">Recepciones</p>
+                        <h3 class="mb-0">10</h3>
+                    </div>
+                    <div class="icon-shape bg-white p-3 rounded-circle shadow-sm text-success">
+                        <i class="fas fa-truck-loading fa-2x"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-xl-3 col-md-6 mb-3">
+            <div class="card card-metric p-3">
+                <div class="d-flex justify-content-between align-items-center">
+                    <div>
+                        <p class="mb-1">Despachos</p>
+                        <h3 class="mb-0">10</h3>
+                    </div>
+                    <div class="icon-shape bg-white p-3 rounded-circle shadow-sm text-success">
+                        <i class="fas fa-shipping-fast fa-2x"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Sección de Gráficos Analíticos -->
+    <div class="row">
+        <div class="col-lg-8 mb-4">
+            <div class="card card-chart-light p-4 h-100">
+                <h5 class="mb-3">Distribución de Stock por Producto</h5>
+                <div style="position: relative; height: 300px;">
+                    <canvas id="stockChart"></canvas>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-4 mb-4">
+            <div class="card card-chart-light p-4 h-100">
+                <h5 class="mb-3">Capacidad de Almacenamiento</h5>
+                <div style="position: relative; height: 300px;" class="d-flex align-items-center justify-content-center">
+                    <canvas id="capacityChart"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Alertas de Stock Crítico y Movimientos Recientes -->
+    <div class="row">
+        <div class="col-lg-6 mb-4">
+            <div class="card card-chart-light p-4 h-100">
+                <h5 class="mb-3 text-danger"><i class="fas fa-exclamation-triangle mr-2"></i>Alertas de Stock Crítico</h5>
+                <div style="max-height: 220px; overflow-y: auto;">
+                    <div class="alert-stock-item">
+                        <span><i class="fas fa-circle mr-2" style="font-size: 8px;"></i> Laptop (Stock actual: 5)</span>
+                        <span class="badge badge-danger">Crítico</span>
+                    </div>
+                    <div class="alert-stock-item">
+                        <span><i class="fas fa-circle mr-2" style="font-size: 8px;"></i> MacBook Pro (Stock actual: 8)</span>
+                        <span class="badge badge-warning text-dark">Bajo</span>
+                    </div>
+                    <div class="alert-stock-item">
+                        <span><i class="fas fa-circle mr-2" style="font-size: 8px;"></i> Tablet (Stock actual: 12)</span>
+                        <span class="badge badge-warning text-dark">Bajo</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-6 mb-4">
+            <div class="card card-chart-light p-4 h-100">
+                <h5 class="mb-3"><i class="fas fa-exchange-alt mr-2"></i>Movimientos Recientes (Kardex)</h5>
+                <div class="table-responsive" style="max-height: 220px; overflow-y: auto;">
+                    <table class="table table-custom mb-0">
+                        <thead>
+                            <tr>
+                                <th>Tipo</th>
+                                <th>Producto</th>
+                                <th>Cant.</th>
+                                <th>Hora</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><span class="badge badge-success">Entrada</span></td>
+                                <td>Teclado Mecánico</td>
+                                <td>+15</td>
+                                <td>11:15</td>
+                            </tr>
+                            <tr>
+                                <td><span class="badge badge-danger">Salida</span></td>
+                                <td>Monitor LG</td>
+                                <td>-2</td>
+                                <td>10:40</td>
+                            </tr>
+                            <tr>
+                                <td><span class="badge badge-success">Entrada</span></td>
+                                <td>Mouse Inalámbrico</td>
+                                <td>+25</td>
+                                <td>09:20</td>
+                            </tr>
+                            <tr>
+                                <td><span class="badge badge-danger">Salida</span></td>
+                                <td>Laptop HP</td>
+                                <td>-1</td>
+                                <td>08:55</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Calendario y Tareas Pendientes del Día -->
+    <div class="row">
+        <div class="col-lg-6 mb-4">
+            <div class="card card-chart-light p-4 h-100">
+                <h5 class="mb-3"><i class="far fa-calendar-alt mr-2"></i>Calendario Operativo</h5>
+                <div class="text-center p-3 bg-white rounded shadow-sm">
+                    <h6 id="current-month-year" class="font-weight-bold text-success mb-3"></h6>
+                    <div class="d-flex justify-content-around font-weight-bold text-muted mb-2" style="font-size: 0.8rem;">
+                        <span>Lun</span><span>Mar</span><span>Mié</span><span>Jue</span><span>Vie</span><span>Sáb</span><span>Dom</span>
+                    </div>
+                    <div id="calendar-grid" class="d-grid" style="display: grid; grid-template-columns: repeat(7, 1fr); gap: 5px; font-size: 0.85rem;">
+                        <!-- Generado por JS -->
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-6 mb-4">
+            <div class="card card-chart-light p-4 h-100">
+                <h5 class="mb-3"><i class="fas fa-tasks mr-2"></i>Tareas por Hacer / Pendientes</h5>
+                <div class="task-container" style="max-height: 220px; overflow-y: auto;">
+                    <div class="task-item">
+                        <span><i class="fas fa-circle text-success mr-2" style="font-size: 8px;"></i> Revisar stock crítico de Teclados</span>
+                        <small class="text-muted">Hoy</small>
+                    </div>
+                    <div class="task-item">
+                        <span><i class="fas fa-circle text-success mr-2" style="font-size: 8px;"></i> Validar recepción de Monitor LG</span>
+                        <small class="text-muted">Pendiente</small>
+                    </div>
+                    <div class="task-item completed">
+                        <span><i class="fas fa-check-circle text-success mr-2" style="font-size: 10px;"></i> Actualizar códigos QR de productos</span>
+                        <small class="text-muted">Hecho</small>
+                    </div>
+                    <div class="task-item">
+                        <span><i class="fas fa-circle text-success mr-2" style="font-size: 8px;"></i> Despacho programado zona norte</span>
+                        <small class="text-muted">16:00</small>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Script de Interceptación Dinámica Avanzada (MutationObserver) -->
+<script>
+    // Destructor automático en tiempo real por si Jazzmin inyecta tarde los elementos
+    const observer = new MutationObserver((mutations, obs) => {
+        const unwantedHeaders = document.querySelectorAll('.content-header, .breadcrumb, h1, .fa-folder, .fa-folder-open');
+        unwantedHeaders.forEach(el => {
+            // Asegurarnos de no borrar nuestros propios títulos del dashboard
+            if (!el.closest('.custom-dashboard')) {
+                let targetBox = el.closest('.row') || el;
+                targetBox.style.display = 'none';
+                targetBox.remove();
+            }
+        });
+    });
+
+    observer.observe(document.body, {
+        childList: true,
+        subtree: true
+    });
+
+    // 1. Reloj en tiempo real
+    function updateClock() {
+        const now = new Date();
+        const hours = String(now.getHours()).padStart(2, '0');
+        const minutes = String(now.getMinutes()).padStart(2, '0');
+        const seconds = String(now.getSeconds()).padStart(2, '0');
+        const clockEl = document.getElementById('live-clock');
+        if (clockEl) clockEl.textContent = `${hours}:${minutes}:${seconds}`;
+    }
+    setInterval(updateClock, 1000);
+    updateClock();
+
+    // 2. Generar Calendario Dinámico
+    function generateCalendar() {
+        const now = new Date();
+        const year = now.getFullYear();
+        const month = now.getMonth();
+        const today = now.getDate();
+
+        const monthsNames = ["Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"];
+        const monthYearEl = document.getElementById('current-month-year');
+        if (monthYearEl) monthYearEl.textContent = `${monthsNames[month]} ${year}`;
+
+        const firstDayIndex = (new Date(year, month, 1).getDay() + 6) % 7; 
+        const totalDays = new Date(year, month + 1, 0).getDate();
+
+        const grid = document.getElementById('calendar-grid');
+        if (!grid) return;
+        grid.innerHTML = "";
+
+        for (let i = 0; i < firstDayIndex; i++) {
+            const emptyCell = document.createElement('div');
+            grid.appendChild(emptyCell);
+        }
+
+        for (let day = 1; day <= totalDays; day++) {
+            const dayCell = document.createElement('div');
+            dayCell.textContent = day;
+            dayCell.style.padding = "6px 0";
+            dayCell.style.borderRadius = "4px";
+            dayCell.style.fontWeight = "600";
+            
+            if (day === today) {
+                dayCell.style.backgroundColor = "#1b5e20";
+                dayCell.style.color = "#ffffff";
+            } else {
+                dayCell.style.color = "#333333";
+            }
+            grid.appendChild(dayCell);
+        }
+    }
+
+    document.addEventListener("DOMContentLoaded", function () {
+        generateCalendar();
+
+        // Gráfico de Stock
+        const ctxStock = document.getElementById('stockChart');
+        if (ctxStock) {
+            new Chart(ctxStock.getContext('2d'), {
+                type: 'bar',
+                data: {
+                    labels: ['Monitor LG', 'MacBook Pro', 'Teclado', 'Mouse', 'Laptop', 'Tablet'],
+                    datasets: [{
+                        label: 'Stock Disponible',
+                        data: [15, 8, 30, 45, 5, 12],
+                        backgroundColor: '#1b5e20',
+                        borderRadius: 6
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: { legend: { display: false } },
+                    scales: {
+                        y: { 
+                            beginAtZero: true, 
+                            grid: { color: 'rgba(27, 94, 32, 0.1)' },
+                            ticks: { color: '#1b5e20', font: { family: 'Plus Jakarta Sans', weight: '600' } }
+                        },
+                        x: { 
+                            grid: { display: false },
+                            ticks: { color: '#1b5e20', font: { family: 'Plus Jakarta Sans', weight: '600' } }
+                        }
+                    }
+                }
+            });
+        }
+
+        // Gráfico de Capacidad
+        const ctxCapacity = document.getElementById('capacityChart');
+        if (ctxCapacity) {
+            new Chart(ctxCapacity.getContext('2d'), {
+                type: 'doughnut',
+                data: {
+                    labels: ['Ocupado', 'Disponible'],
+                    datasets: [{
+                        data: [78, 22],
+                        backgroundColor: ['#1b5e20', '#4caf50'],
+                        borderWidth: 0
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { 
+                            position: 'bottom',
+                            labels: { color: '#1b5e20', font: { family: 'Plus Jakarta Sans', weight: '600' } }
+                        }
+                    }
+                }
+            });
+        }
+    });
+</script>
+{% endblock %}

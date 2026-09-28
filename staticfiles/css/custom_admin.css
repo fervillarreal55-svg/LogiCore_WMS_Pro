@@ -1,0 +1,252 @@
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap');
+
+body, .content-wrapper, .card, .main-footer, table, input, select, button, th, td {
+    font-family: 'Plus Jakarta Sans', sans-serif !important;
+}
+
+.content-wrapper {
+    background-color: #f4f7f6 !important;
+    padding: 24px;
+}
+
+#changelist, .card, .module {
+    background: #ffffff !important;
+    border-radius: 16px !important;
+    box-shadow: 0 4px 20px rgba(46, 125, 50, 0.06) !important;
+    border: 1px solid rgba(76, 175, 80, 0.15) !important;
+    overflow: hidden;
+}
+
+#changelist table#result_list th, .card-body table thead th {
+    background: linear-gradient(135deg, #4caf50 0%, #2e7d32 100%) !important;
+    color: #ffffff !important;
+    border: none !important;
+    font-weight: 600 !important;
+    padding: 16px !important;
+    text-transform: uppercase;
+    font-size: 0.82rem;
+    letter-spacing: 0.5px;
+}
+
+#changelist table#result_list th a, 
+#changelist table#result_list th span,
+.card-body table thead th a {
+    color: #ffffff !important;
+}
+
+#changelist table#result_list td, table.table-striped tbody tr td {
+    color: #2c3e50 !important;
+    vertical-align: middle !important;
+    padding: 14px 16px !important;
+    border-top: 1px solid #e8f5e9 !important;
+    font-size: 0.95rem;
+}
+
+#changelist table#result_list td a, .card table a {
+    color: #2e7d32 !important;
+    font-weight: 600;
+    text-decoration: none;
+    transition: color 0.2s ease;
+}
+
+#changelist table#result_list td a:hover {
+    color: #1b5e20 !important;
+    text-decoration: underline;
+}
+
+#changelist table#result_list tbody tr:hover, table.table-striped tbody tr:hover {
+    background-color: #f1f8f2 !important;
+}
+
+.btn-success, input[type="submit"], .button, .btn-primary {
+    background: linear-gradient(135deg, #4caf50 0%, #2e7d32 100%) !important;
+    border: none !important;
+    color: #ffffff !important;
+    border-radius: 10px !important;
+    font-weight: 600 !important;
+    padding: 9px 18px !important;
+    box-shadow: 0 4px 12px rgba(76, 175, 80, 0.2);
+    transition: all 0.2s ease;
+}
+
+.btn-success:hover, input[type="submit"]:hover, .button:hover, .btn-primary:hover {
+    background: linear-gradient(135deg, #43a047 0%, #1b5e20 100%) !important;
+    box-shadow: 0 6px 15px rgba(76, 175, 80, 0.3);
+}
+
+input[type="text"], input[type="search"], select, textarea {
+    border-radius: 10px !important;
+    border: 1px solid #c8e6c9 !important;
+    padding: 9px 14px !important;
+    background-color: #fafbfc !important;
+}
+
+input[type="text"]:focus, input[type="search"]:focus, select:focus {
+    border-color: #4caf50 !important;
+    box-shadow: 0 0 0 0.25rem rgba(76, 175, 80, 0.2) !important;
+    background-color: #ffffff !important;
+}
+
+.breadcrumb, ol.breadcrumb {
+    background: transparent !important;
+    padding: 0 !important;
+    display: flex !important;
+    align-items: center !important;
+}
+
+.breadcrumb-item {
+    background: transparent !important;
+    padding: 0 !important;
+    box-shadow: none !important;
+}
+
+.breadcrumb-item a {
+    background-color: #d8f3dc !important;
+    color: #1b5e20 !important;
+    padding: 6px 14px !important;
+    border-radius: 50px !important;
+    font-weight: 600 !important;
+    text-decoration: none !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    margin-left: 4px !important;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.05) !important;
+    transition: all 0.2s ease !important;
+}
+
+.breadcrumb-item a:hover {
+    background-color: #b7e4c7 !important;
+    color: #0d3b0f !important;
+}
+
+.breadcrumb-item + .breadcrumb-item::before {
+    content: "" !important;
+    padding: 0 !important;
+}
+
+.breadcrumb-item.active {
+    background-color: #95d5b2 !important;
+    color: #08280a !important;
+    padding: 6px 14px !important;
+    border-radius: 50px !important;
+    font-weight: 600 !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    margin-left: 4px !important;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.05) !important;
+}
+
+body .main-header.navbar .navbar-nav.ml-auto .user-menu > a::after,
+body .main-header.navbar .navbar-nav.ml-auto .dropdown.user > a::after {
+    content: "FERUSER";
+    font-family: 'Plus Jakarta Sans', sans-serif !important;
+    font-weight: 600 !important;
+    font-size: 0.9rem !important;
+    color: #1b5e20 !important;
+    margin-right: 8px !important;
+    vertical-align: middle !important;
+}
+
+div.content-wrapper div.content h1,
+.content-header h1,
+#content h1,
+.content-header h3,
+#content h3.mb-0,
+h3.mb-0 {
+    font-size: 1.5rem !important;
+    font-weight: 700 !important;
+    color: #1b5e20 !important;
+    background: linear-gradient(135deg, #e8f5e9 0%, #c8e6c9 100%) !important;
+    padding: 12px 18px !important;
+    border-radius: 10px !important;
+    border-left: 6px solid #2e7d32 !important;
+    box-shadow: 0 3px 8px rgba(46, 125, 50, 0.08) !important;
+    display: flex !important;
+    align-items: center !important;
+    margin-bottom: 20px !important;
+}
+
+div.content-wrapper div.content h1::before,
+.content-header h1::before,
+#content h1::before,
+.content-header h3::before,
+#content h3.mb-0::before,
+h3.mb-0::before {
+    content: "📁" !important;
+    margin-right: 12px !important;
+    font-size: 1.2rem !important;
+}
+
+/* Barra lateral izquierda con degradado verde y separación de módulos en botones */
+aside, .main-sidebar, .main-sidebar.sidebar-dark-primary {
+    background: linear-gradient(180deg, #163818 0%, #235528 50%, #2e7d32 100%) !important;
+    box-shadow: 4px 0 15px rgba(46, 125, 50, 0.25) !important;
+}
+
+aside .nav-sidebar .nav-item .nav-link,
+.main-sidebar .nav-sidebar .nav-item .nav-link {
+    color: #ffffff !important;
+    background: rgba(255, 255, 255, 0.08) !important;
+    border: 1px solid rgba(255, 255, 255, 0.12) !important;
+    border-radius: 10px !important;
+    margin: 6px 10px !important;
+    padding: 10px 14px !important;
+    font-weight: 500 !important;
+    transition: all 0.2s ease !important;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+aside .nav-sidebar .nav-item .nav-link:hover,
+.main-sidebar .nav-sidebar .nav-item .nav-link:hover {
+    background: rgba(255, 255, 255, 0.2) !important;
+    border-color: rgba(255, 255, 255, 0.3) !important;
+    color: #ffffff !important;
+    transform: translateY(-1px);
+}
+
+aside .nav-sidebar .nav-item .nav-link.active,
+aside .nav-sidebar .nav-item.menu-open > .nav-link,
+.main-sidebar .nav-sidebar .nav-item .nav-link.active {
+    background: linear-gradient(135deg, #4caf50 0%, #2e7d32 100%) !important;
+    border: 1px solid rgba(255, 255, 255, 0.4) !important;
+    color: #ffffff !important;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25) !important;
+    font-weight: 700 !important;
+}
+
+aside .sidebar .nav-header,
+.main-sidebar .sidebar .nav-header {
+    color: #a3e4d7 !important;
+    font-size: 0.78rem !important;
+    font-weight: 700 !important;
+    letter-spacing: 0.08em !important;
+    padding: 16px 16px 6px 16px !important;
+    text-transform: uppercase !important;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    margin-top: 8px;
+}
+aside .nav-sidebar .nav-item a[href*="perfil"],
+aside .nav-sidebar .nav-item a[href*="user"],
+aside .nav-sidebar .nav-item a:has-text("Perfiles de Usuario") {
+    display: none !important;
+}
+/* Fondo general nítido con capa translúcida estilo marca de agua */
+body {
+    background: linear-gradient(rgba(244, 247, 246, 0.85), rgba(244, 247, 246, 0.85)), url('/static/images/fondo_dashboard.jpg') no-repeat center center fixed !important;
+    background-size: cover !important;
+}
+
+/* Fondo para la pantalla de login con marca de agua clara y nítida */
+body.login, body.login-page {
+    background: linear-gradient(rgba(20, 40, 25, 0.8), rgba(20, 40, 25, 0.8)), url('/static/images/fondo_login.jpg') no-repeat center center fixed !important;
+    background-size: cover !important;
+}
+/* Ocultar la barra de la carpeta solo en el inicio (Dashboard de Jazzmin) */
+body.dashboard-page .content-wrapper > .content > .row:first-child {
+    display: none !important;
+}
+
+/* Por si acaso el body tiene otra clase de index en tu versión de Jazzmin */
+body.model-index .content-wrapper > .content > .row:first-child {
+    display: none !important;
+}
