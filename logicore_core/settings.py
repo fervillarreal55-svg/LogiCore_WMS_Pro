@@ -160,7 +160,7 @@ JAZZMIN_SETTINGS = {
     },
     "theme": "flatly",
     "dark_mode_theme": "darkly",
-    "custom_css": "css/custom_admin.css?v=2.0",
+    "custom_css": "css/custom_admin.css",
     "order_with_apps": [
         "auth",
         "modulo",
