@@ -32,3 +32,25 @@ def dashboard_futurista(request):
         'stocks_productos': stocks_productos,
     }
     return render(request, 'admin/index.html', context)
+def dashboard_invitado(request):
+    total_productos = Producto.objects.count()
+    total_almacenes = Almacen.objects.count()
+    total_recepciones = Recepcion.objects.count()
+    total_despachos = Despacho.objects.count()
+
+    productos = Producto.objects.all()[:10]
+    almacenes = Almacen.objects.all()
+    recepciones = Recepcion.objects.all()
+    despachos = Despacho.objects.all()
+
+    contexto = {
+        'total_productos': total_productos,
+        'total_almacenes': total_almacenes,
+        'total_recepciones': total_recepciones,
+        'total_despachos': total_despachos,
+        'productos': productos,
+        'almacenes': almacenes,
+        'recepciones': recepciones,
+        'despachos': despachos,
+    }
+    return render(request, 'modulo/index.html', contexto)

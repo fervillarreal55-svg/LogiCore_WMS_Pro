@@ -9,6 +9,7 @@ urlpatterns = [
     path('', RedirectView.as_view(url='/admin/')),
     path('admin/', admin.site.urls),
     path('dashboard/', views.dashboard_futurista, name='dashboard'),
+    path('invitado/', views.dashboard_invitado, name='dashboard_invitado'),
 ]
 
 if settings.DEBUG:
